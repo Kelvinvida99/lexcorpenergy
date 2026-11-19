@@ -1,0 +1,93 @@
+---
+const faq = [
+  {
+    q: '¿Qué es la medición neta?',
+    a: 'Es el esquema que permite conectar tu sistema solar a la red. La energía que produces y no consumes en el momento se inyecta a la red y se acredita en tu factura, según el reglamento vigente y la aprobación de tu distribuidora. Te acompañamos en el trámite.',
+  },
+  {
+    q: '¿El sistema funciona durante un apagón?',
+    a: 'Un sistema conectado a la red sin baterías se apaga durante el corte por seguridad. Si quieres respaldo durante los apagones, el sistema necesita baterías. Diseñamos ambas opciones.',
+  },
+  {
+    q: '¿Cuánto espacio de techo necesito?',
+    a: 'Como referencia, cada panel moderno ocupa unos 2.6 m² contando la separación. El estimador de arriba te da un área aproximada; en la visita técnica medimos tu techo real, sus sombras y su orientación.',
+  },
+  {
+    q: '¿Sirve mi techo de teja o de zinc?',
+    a: 'Sí. Instalamos en techos de teja, losas de concreto, estructuras metálicas y también sobre suelo. El tipo de techo define la estructura de montaje.',
+  },
+  {
+    q: '¿Qué mantenimiento necesita?',
+    a: 'Poco: limpieza periódica de los paneles (con más frecuencia en zonas con polvo o salitre) y una revisión de conexiones y protecciones. Ofrecemos planes de mantenimiento y monitoreo.',
+  },
+  {
+    q: '¿Qué garantía tienen los equipos?',
+    a: 'Depende del fabricante de cada equipo. En la propuesta detallamos la garantía de paneles, inversor y baterías, junto con la garantía de nuestra instalación.',
+  },
+];
+---
+<section class="section faq" id="preguntas" aria-labelledby="faq-title">
+  <div class="wrap faq__in">
+    <div class="section__head faq__head">
+      <h2 id="faq-title">Preguntas frecuentes</h2>
+      <p>Lo que más nos preguntan antes de instalar.</p>
+    </div>
+    <div class="faq__list">
+      {faq.map((f) => (
+        <details>
+          <summary>
+            <span>{f.q}</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14" /></svg>
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { background: var(--concrete); }
+  .faq__in {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+  .faq__head { position: sticky; top: calc(var(--header-h) + 32px); }
+  .faq__list { border-top: 2px solid var(--pet); }
+  details { border-bottom: 1px solid var(--line-light); }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 64px;
+    padding: 18px 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.3125rem);
+    font-weight: 700;
+    font-stretch: 88%;
+    color: var(--pet);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary svg {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: var(--tq-ink);
+    stroke-width: 2;
+    transition: transform 0.3s var(--ease-out);
+  }
+  details[open] summary svg { transform: rotate(45deg); }
+  summary:hover { color: var(--tq-ink); }
+  details p { padding: 0 48px 24px 0; color: var(--ink-soft); max-width: 62ch; }
+
+  @media (max-width: 860px) {
+    .faq__in { grid-template-columns: 1fr; }
+    .faq__head { position: static; }
+    details p { padding-right: 0; }
+  }
+</style>

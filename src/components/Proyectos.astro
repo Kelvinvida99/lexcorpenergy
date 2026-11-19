@@ -1,0 +1,251 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import { obras, categorias } from '../lib/obras';
+
+const full = await Promise.all(
+  obras.map((o) => getImage({ src: o.img, width: 1600, format: 'webp', quality: 70 }))
+);
+---
+<section class="section proy" id="proyectos" aria-labelledby="proy-title">
+  <div class="wrap">
+    <div class="proy__head">
+      <div class="section__head">
+        <h2 id="proy-title">Obra hecha</h2>
+        <p>Fotos reales de instalaciones de LexCorp Energy: azoteas, viviendas, sistemas sobre suelo y bancos de baterías.</p>
+      </div>
+      <div class="proy__filters" role="group" aria-label="Filtrar proyectos">
+        <button type="button" aria-pressed="true" data-f="todos">Todos <span class="num">{obras.length}</span></button>
+        {categorias.map((c) => (
+          <button type="button" aria-pressed="false" data-f={c.id}>
+            {c.label} <span class="num">{obras.filter((o) => o.cat === c.id).length}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <ul class="proy__grid" data-grid>
+      {obras.map((o, i) => (
+        <li class="proy__item" data-cat={o.cat}>
+          <button type="button" class="proy__btn" data-open={i}
+            data-full={full[i].src} data-alt={o.alt} data-cap={`${o.titulo}${o.fecha ? ' · ' + o.fecha : ''}`}>
+            <Picture src={o.img} alt={o.alt} formats={['avif', 'webp']} widths={[400, 700, 1000]} width={1000} quality={72}
+              sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 34vw" loading="lazy" />
+            <span class="proy__cap">
+              <span class="proy__t">{o.titulo}</span>
+              {o.fecha && <span class="dim">{o.fecha}</span>}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+    <p class="proy__empty" hidden data-empty>No hay fotos en esta categoría todavía.</p>
+  </div>
+
+  <dialog class="lb" data-lb aria-label="Foto del proyecto">
+    <figure class="lb__fig">
+      <img data-lb-img src={full[0].src} alt={obras[0].alt} />
+      <figcaption class="lb__cap">
+        <span data-lb-cap></span>
+        <span class="dim num" data-lb-count></span>
+      </figcaption>
+    </figure>
+    <button type="button" class="lb__btn lb__prev" data-lb-prev aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" /></svg>
+    </button>
+    <button type="button" class="lb__btn lb__next" data-lb-next aria-label="Foto siguiente">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+    </button>
+    <button type="button" class="lb__btn lb__close" data-lb-close aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+    </button>
+  </dialog>
+</section>
+
+<style>
+  .proy { background: var(--concrete); }
+  .proy__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: clamp(32px, 4vw, 56px);
+  }
+  .proy__head .section__head { margin-bottom: 0; }
+  .proy__filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .proy__filters button {
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1px solid var(--pet);
+    background: transparent;
+    color: var(--pet);
+    font: inherit;
+    font-weight: 650;
+    font-stretch: 85%;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  }
+  .proy__filters button span { margin-left: 4px; color: var(--tq-ink); font-weight: 600; }
+  .proy__filters button:hover { background: rgba(3, 70, 68, 0.07); }
+  .proy__filters button[aria-pressed='true'] { background: var(--pet); color: #fff; }
+  .proy__filters button[aria-pressed='true'] span { color: var(--tq-light); }
+
+  .proy__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: clamp(110px, 10vw, 150px);
+    grid-auto-flow: dense;
+    gap: 12px;
+  }
+  .proy__item { grid-column: span 2; grid-row: span 2; }
+  .proy__item:nth-child(6n + 1) { grid-column: span 4; grid-row: span 4; }
+  .proy__item[hidden] { display: none; }
+
+  .proy__btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: var(--pet);
+    cursor: zoom-in;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-out), outline-color 0.4s var(--ease-out), opacity 0.4s var(--ease-out);
+    outline: 2px solid transparent;
+    outline-offset: 3px;
+  }
+  .proy__btn :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .proy__cap {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 12px;
+    padding: 12px 14px;
+    background: linear-gradient(transparent, rgba(2, 46, 45, 0.88));
+    color: #fff;
+    text-align: left;
+  }
+  .proy__t { font-weight: 700; font-stretch: 85%; }
+  .proy__cap .dim { color: var(--tq-light); align-self: center; }
+
+  /* el proyecto enfocado se levanta; los demás se atenúan */
+  @media (hover: hover) {
+    .proy__grid:has(.proy__btn:hover) .proy__btn:not(:hover) { opacity: 0.55; }
+    .proy__btn:hover { transform: translateY(-4px); outline-color: var(--tq); }
+  }
+  .proy__grid:has(.proy__btn:focus-visible) .proy__btn:not(:focus-visible) { opacity: 0.55; }
+
+  .proy__empty { padding: 32px 0; color: var(--ink-soft); }
+
+  @media (max-width: 1100px) {
+    .proy__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .proy__item:nth-child(6n + 1) { grid-column: span 4; grid-row: span 3; }
+  }
+  @media (max-width: 600px) {
+    .proy__grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 132px; gap: 8px; }
+    .proy__item { grid-column: span 1; grid-row: span 1; }
+    .proy__item:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
+    .proy__cap .dim { display: none; }
+  }
+
+  /* visor */
+  .lb {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(2, 30, 29, 0.96);
+    color: var(--on-pet);
+  }
+  .lb::backdrop { background: rgba(2, 30, 29, 0.6); }
+  .lb[open] { display: grid; place-items: center; animation: lb-in 0.3s var(--ease-out); }
+  @keyframes lb-in { from { opacity: 0; } }
+  .lb__fig { margin: 0; display: grid; gap: 12px; padding: 64px clamp(16px, 6vw, 96px); max-width: 100%; }
+  .lb__fig img { max-width: 100%; max-height: calc(100dvh - 180px); width: auto; object-fit: contain; margin-inline: auto; }
+  .lb__cap { display: flex; justify-content: space-between; gap: 16px; font-weight: 600; }
+  .lb__cap .dim { color: var(--tq-light); }
+  .lb__btn {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: var(--pet);
+    color: #fff;
+    cursor: pointer;
+  }
+  .lb__btn:hover { background: var(--pet-mid); }
+  .lb__btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .lb__prev { left: 12px; top: 50%; translate: 0 -50%; }
+  .lb__next { right: 12px; top: 50%; translate: 0 -50%; }
+  .lb__close { right: 12px; top: 12px; }
+  .lb :focus-visible { outline-color: var(--sun); }
+</style>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.proy__item'));
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-f]'));
+
+  filters.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.f!;
+      filters.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      let n = 0;
+      items.forEach((it) => {
+        const show = f === 'todos' || it.dataset.cat === f;
+        it.hidden = !show;
+        if (show) n++;
+      });
+      if (empty) empty.hidden = n > 0;
+    })
+  );
+
+  const lb = document.querySelector<HTMLDialogElement>('[data-lb]');
+  if (grid && lb) {
+    const img = lb.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const cap = lb.querySelector<HTMLElement>('[data-lb-cap]')!;
+    const count = lb.querySelector<HTMLElement>('[data-lb-count]')!;
+    let visible: HTMLButtonElement[] = [];
+    let idx = 0;
+    let opener: HTMLElement | null = null;
+
+    const show = (i: number) => {
+      idx = (i + visible.length) % visible.length;
+      const b = visible[idx];
+      img.src = b.dataset.full!;
+      img.alt = b.dataset.alt!;
+      cap.textContent = b.dataset.cap!;
+      count.textContent = `${idx + 1} / ${visible.length}`;
+    };
+
+    grid.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-open]');
+      if (!b) return;
+      visible = items.filter((it) => !it.hidden).map((it) => it.querySelector<HTMLButtonElement>('[data-open]')!);
+      opener = b;
+      show(visible.indexOf(b));
+      lb.showModal();
+    });
+    lb.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(idx - 1));
+    lb.querySelector('[data-lb-next]')!.addEventListener('click', () => show(idx + 1));
+    lb.querySelector('[data-lb-close]')!.addEventListener('click', () => lb.close());
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(idx - 1);
+      if (e.key === 'ArrowRight') show(idx + 1);
+    });
+    lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+    lb.addEventListener('close', () => opener?.focus());
+  }
+</script>

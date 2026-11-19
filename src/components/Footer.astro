@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/marca/logo.png';
+import { empresa } from '../lib/config';
+
+const contacto: [string, string | null, string?][] = [
+  ['Teléfono', empresa.telefono, empresa.telefono ? `tel:${empresa.telefono.replace(/\s/g, '')}` : undefined],
+  ['Correo', empresa.correo, empresa.correo ? `mailto:${empresa.correo}` : undefined],
+  ['Dirección', empresa.direccion],
+];
+const redes = [
+  ['Instagram', empresa.instagram],
+  ['Facebook', empresa.facebook],
+  ['LinkedIn', empresa.linkedin],
+].filter(([, v]) => v) as [string, string][];
+const year = new Date().getFullYear();
+---
+<footer class="ftr on-pet">
+  <div class="wrap ftr__in">
+    <div class="ftr__brand">
+      <div class="ftr__logo">
+        <Image src={logo} alt="LexCorp Energy" width={150} densities={[1, 2]} />
+      </div>
+      <p>Energía solar para viviendas, negocios e industrias en República Dominicana.</p>
+    </div>
+
+    <nav aria-label="Pie de página">
+      <p class="dim ftr__h">Secciones</p>
+      <ul>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#proceso">Cómo trabajamos</a></li>
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#preguntas">Preguntas</a></li>
+        <li><a href="#cotizacion">Pedir cotización</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <p class="dim ftr__h">Contacto</p>
+      <dl class="ftr__dl">
+        {contacto.map(([k, v, href]) => (
+          <div>
+            <dt>{k}</dt>
+            <dd>{v ? (href ? <a href={href}>{v}</a> : v) : <span class="pendiente">por confirmar</span>}</dd>
+          </div>
+        ))}
+      </dl>
+      {redes.length > 0 && (
+        <ul class="ftr__redes">{redes.map(([k, v]) => <li><a href={v} rel="noopener" target="_blank">{k}</a></li>)}</ul>
+      )}
+    </div>
+  </div>
+  <div class="wrap ftr__base dim">
+    <span>© {year} LexCorp Energy</span>
+    <span>Las estimaciones de esta web son orientativas.</span>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--pet-deep); padding-top: clamp(56px, 7vw, 96px); }
+  .ftr__in {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr);
+    gap: clamp(32px, 5vw, 80px);
+  }
+  .ftr__logo { width: 180px; padding: 16px; background: var(--paper); outline: 2px solid var(--tq); outline-offset: -2px; }
+  .ftr__logo :global(img) { width: 100%; height: auto; }
+  .ftr__brand p { margin-top: 20px; color: var(--on-pet-soft); max-width: 26rem; }
+  .ftr__h { color: var(--tq-light); margin-bottom: 16px; }
+  .ftr ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .ftr a { color: var(--on-pet); text-decoration: none; }
+  .ftr a:hover { color: var(--sun); text-decoration: underline; }
+  .ftr__dl { margin: 0; display: grid; gap: 12px; }
+  .ftr__dl div { display: grid; grid-template-columns: 96px 1fr; gap: 12px; }
+  .ftr__dl dt { color: var(--on-pet-soft); }
+  .ftr__dl dd { margin: 0; }
+  .ftr__redes { margin-top: 20px !important; grid-auto-flow: column; justify-content: start; gap: 20px !important; }
+  .ftr__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: clamp(48px, 6vw, 80px);
+    padding-block: 24px 96px;
+    border-top: 1px solid var(--line);
+    color: var(--on-pet-soft);
+  }
+  @media (max-width: 860px) {
+    .ftr__in { grid-template-columns: 1fr; }
+  }
+</style>

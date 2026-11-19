@@ -1,0 +1,51 @@
+---
+import { siWhatsapp } from 'simple-icons';
+import { waLink } from '../lib/config';
+
+const wa = waLink('Hola, quiero información sobre energía solar.');
+const href = wa ?? '#cotizacion';
+const label = wa ? 'Escribir por WhatsApp' : 'Pedir cotización';
+---
+<a class="wa is-hidden" href={href} {...(wa ? { target: '_blank', rel: 'noopener' } : {})} aria-label={label} data-wa>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d={siWhatsapp.path} /></svg>
+  <span>{wa ? 'WhatsApp' : 'Cotizar'}</span>
+</a>
+
+<style>
+  .wa {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 0 20px 0 16px;
+    background: var(--pet);
+    color: #fff;
+    font-weight: 750;
+    font-stretch: 88%;
+    text-decoration: none;
+    transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), background-color 0.2s;
+  }
+  .wa:hover { background: var(--pet-mid); }
+  .wa svg { width: 24px; height: 24px; color: #25d366; }
+  .wa.is-hidden { opacity: 0; transform: translateY(16px); pointer-events: none; }
+</style>
+
+<script>
+  // Se oculta mientras el hero (que ya tiene su CTA) o el formulario están a la vista.
+  const wa = document.querySelector<HTMLElement>('[data-wa]');
+  const zonas = ['top', 'cotizacion'].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+  if (wa && zonas.length && 'IntersectionObserver' in window) {
+    const visibles = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target)));
+      wa.classList.toggle('is-hidden', visibles.size > 0);
+    }, { threshold: 0.15 });
+    zonas.forEach((z) => io.observe(z));
+  } else {
+    wa?.classList.remove('is-hidden');
+  }
+</script>

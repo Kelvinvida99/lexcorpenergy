@@ -1,0 +1,97 @@
+---
+const pasos = [
+  { t: 'Visita técnica', d: 'Revisamos tu techo, tu tablero eléctrico y tus facturas para entender cómo consumes.', dur: 'Inicio' },
+  { t: 'Diseño e ingeniería', d: 'Dimensionamos el sistema, dibujamos la planta de distribución y te presentamos la propuesta.', dur: 'Propuesta' },
+  { t: 'Instalación', d: 'Montamos estructura, paneles, inversor y protecciones, y ponemos el sistema en marcha.', dur: 'Obra' },
+  { t: 'Interconexión', d: 'Te acompañamos en el trámite de medición neta con tu distribuidora.', dur: 'Trámite' },
+  { t: 'Monitoreo y mantenimiento', d: 'Seguimos la producción y programamos limpiezas e inspecciones.', dur: 'Siempre' },
+];
+---
+<section class="section on-pet proc" id="proceso" aria-labelledby="proc-title">
+  <div class="wrap">
+    <div class="section__head">
+      <h2 id="proc-title">Cómo trabajamos</h2>
+      <p>Cinco pasos, en este orden. Sabes en qué punto está tu proyecto en todo momento.</p>
+    </div>
+
+    <ol class="proc__list" data-proc>
+      {pasos.map((p, i) => (
+        <li class="proc__row" style={`--i:${i}`}>
+          <span class="proc__n num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <span class="proc__lamp" aria-hidden="true"></span>
+          <h3 class="proc__t"><span class="sr-only">Paso {i + 1}: </span>{p.t}</h3>
+          <p class="proc__d">{p.d}</p>
+          <span class="proc__dur dim">{p.dur}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .proc { background: var(--pet); }
+  .proc__list { list-style: none; margin: 0; padding: 0; }
+  .proc__row {
+    display: grid;
+    grid-template-columns: 88px 20px minmax(0, 4fr) minmax(0, 6fr) 96px;
+    gap: clamp(16px, 2.4vw, 40px);
+    align-items: center;
+    padding-block: clamp(20px, 2.6vw, 36px);
+    border-top: 1px solid var(--line);
+  }
+  .proc__row:last-child { border-bottom: 1px solid var(--line); }
+  .proc__n {
+    font-size: clamp(2.5rem, 2rem + 2vw, 4rem);
+    font-weight: 850;
+    font-stretch: 62%;
+    line-height: 1;
+    color: var(--tq-light);
+    transition: color 0.6s var(--ease-out);
+    transition-delay: calc(var(--i) * 160ms);
+  }
+  .proc__lamp {
+    width: 20px;
+    height: 36px;
+    border: 1px dashed rgba(107, 214, 207, 0.6);
+    background: transparent;
+    transition: background-color 0.6s var(--ease-out), border-color 0.6s var(--ease-out);
+    transition-delay: calc(var(--i) * 160ms);
+  }
+  .proc__t { font-size: var(--fs-h3); }
+  .proc__d { color: var(--on-pet-soft); max-width: 36rem; }
+  .proc__dur { color: var(--tq-light); text-align: right; }
+
+  /* Encendido en secuencia (por defecto visible: solo cambia el color) */
+  [data-proc].lit .proc__lamp { background: var(--bolt); border-color: transparent; }
+  [data-proc].lit .proc__n { color: var(--sun); }
+
+  @media (max-width: 860px) {
+    .proc__row {
+      grid-template-columns: 56px 14px minmax(0, 1fr);
+      grid-template-areas: 'n lamp t' 'n lamp d' 'n lamp dur';
+      row-gap: 8px;
+      align-items: start;
+    }
+    .proc__n { grid-area: n; font-size: 2.25rem; }
+    .proc__lamp { grid-area: lamp; width: 14px; height: 26px; margin-top: 6px; }
+    .proc__t { grid-area: t; }
+    .proc__d { grid-area: d; }
+    .proc__dur { grid-area: dur; text-align: left; }
+  }
+</style>
+
+<script>
+  const list = document.querySelector('[data-proc]');
+  if (list) {
+    if (!('IntersectionObserver' in window)) list.classList.add('lit');
+    else {
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { list.classList.add('lit'); io.disconnect(); }
+        }),
+        { threshold: 0.35 }
+      );
+      io.observe(list);
+    }
+  }
+</script>

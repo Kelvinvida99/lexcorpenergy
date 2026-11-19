@@ -1,0 +1,246 @@
+---
+import { siWhatsapp } from 'simple-icons';
+import { empresa, waLink } from '../lib/config';
+
+const wa = waLink('Hola, quiero una cotización de energía solar.');
+---
+<section class="cot" id="cotizacion" aria-labelledby="cot-title">
+  <div class="cot__side on-pet">
+    <h2 id="cot-title">Pide tu cotización</h2>
+    <p class="cot__lead">Cuéntanos de tu casa o de tu negocio. Te contactamos para agendar la visita técnica.</p>
+    <ol class="cot__next">
+      <li><span class="dim">Hoy</span>Envías tus datos y tu factura aproximada.</li>
+      <li><span class="dim">Después</span>Te llamamos para agendar la visita técnica.</li>
+      <li><span class="dim">Al final</span>Recibes una propuesta con diseño, equipos y garantías.</li>
+    </ol>
+    <div class="cot__alt">
+      <p>¿Prefieres escribirnos?</p>
+      {wa ? (
+        <a class="btn btn--line" href={wa} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d={siWhatsapp.path} /></svg>
+          Escribir por WhatsApp
+        </a>
+      ) : (
+        <p class="cot__pend">WhatsApp <span class="pendiente">número por confirmar</span></p>
+      )}
+      {empresa.telefono
+        ? <p>Teléfono: <a href={`tel:${empresa.telefono.replace(/\s/g, '')}`}>{empresa.telefono}</a></p>
+        : <p>Teléfono <span class="pendiente">por confirmar</span></p>}
+    </div>
+  </div>
+
+  <div class="cot__form-wrap">
+    <form class="cot__form" name="cotizacion" method="POST" action="/gracias/" data-netlify="true"
+      netlify-honeypot="empresa-web" novalidate data-form>
+      <input type="hidden" name="form-name" value="cotizacion" />
+      <p class="sr-only"><label>No llenar este campo: <input name="empresa-web" tabindex="-1" autocomplete="off" /></label></p>
+
+      <div class="f">
+        <label for="f-nombre">Nombre</label>
+        <input id="f-nombre" name="nombre" autocomplete="name" required aria-describedby="e-nombre" />
+        <p class="f__err" id="e-nombre" data-err-for="nombre"></p>
+      </div>
+
+      <div class="f f--half">
+        <label for="f-tel">Teléfono o WhatsApp</label>
+        <input id="f-tel" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required
+          pattern="[0-9+()\-\s]{10,}" aria-describedby="e-tel" />
+        <p class="f__err" id="e-tel" data-err-for="telefono"></p>
+      </div>
+
+      <div class="f f--half">
+        <label for="f-correo">Correo <span class="f__opt">(opcional)</span></label>
+        <input id="f-correo" name="correo" type="email" autocomplete="email" aria-describedby="e-correo" />
+        <p class="f__err" id="e-correo" data-err-for="correo"></p>
+      </div>
+
+      <div class="f f--half">
+        <label for="f-servicio">¿Qué necesitas?</label>
+        <select id="f-servicio" name="servicio">
+          <option value="residencial">Solar para mi casa</option>
+          <option value="comercial">Solar para mi negocio o industria</option>
+          <option value="mantenimiento">Mantenimiento o monitoreo</option>
+          <option value="consultoria">Consultoría o estudio eléctrico</option>
+        </select>
+      </div>
+
+      <div class="f f--half">
+        <label for="f-factura">Factura de luz mensual (RD$)</label>
+        <input id="f-factura" name="factura" inputmode="numeric" placeholder="Ej. 12,000" />
+      </div>
+
+      <div class="f">
+        <label for="f-zona">Provincia o sector</label>
+        <input id="f-zona" name="zona" autocomplete="address-level2" placeholder="Ej. Santo Domingo, Piantini" />
+      </div>
+
+      <div class="f">
+        <label for="f-msg">Algo más que debamos saber <span class="f__opt">(opcional)</span></label>
+        <textarea id="f-msg" name="mensaje" rows="4" placeholder="Tipo de techo, si quieres baterías, horarios para la visita…"></textarea>
+      </div>
+
+      <div class="f f--submit">
+        <button class="btn btn--sun" type="submit" data-submit>
+          <span data-submit-label>Enviar solicitud</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </button>
+        <p class="f__status" role="status" aria-live="polite" data-status></p>
+      </div>
+    </form>
+
+    <div class="cot__ok" hidden tabindex="-1" data-ok>
+      <h3>Recibimos tu solicitud.</h3>
+      <p>Te contactaremos para agendar la visita técnica. Si es urgente, escríbenos por WhatsApp.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cot {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    background: var(--paper);
+  }
+  .cot__side {
+    padding: clamp(56px, 8vw, 120px) clamp(24px, 5vw, 80px);
+    background-color: var(--pet);
+  }
+  .cot__side h2 { font-size: var(--fs-h2); }
+  .cot__lead { margin-top: 20px; font-size: var(--fs-lead); color: var(--on-pet-soft); max-width: 30rem; }
+  .cot__next { list-style: none; margin: 40px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .cot__next li {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cot__next .dim { color: var(--sun); padding-top: 3px; }
+  .cot__alt { margin-top: 40px; display: grid; gap: 14px; justify-items: start; color: var(--on-pet-soft); }
+  .cot__alt a:not(.btn) { color: #fff; }
+
+  .cot__form-wrap { padding: clamp(48px, 7vw, 112px) clamp(24px, 5vw, 80px); }
+  .cot__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    max-width: 720px;
+  }
+  .f { grid-column: 1 / -1; display: grid; gap: 8px; }
+  .f--half { grid-column: span 1; }
+  .f label { font-weight: 700; font-stretch: 88%; color: var(--pet); }
+  .f__opt { font-weight: 500; color: var(--ink-soft); }
+  .f input, .f select, .f textarea {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 14px;
+    border: 1px solid rgba(3, 70, 68, 0.45);
+    border-radius: 0;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    caret-color: var(--tq);
+    transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  }
+  .f select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6' fill='none' stroke='%23034644' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 44px;
+  }
+  .f textarea { resize: vertical; min-height: 120px; }
+  .f input::placeholder, .f textarea::placeholder { color: #5f7472; }
+  .f input:hover, .f select:hover, .f textarea:hover { border-color: var(--pet); }
+  .f input:focus, .f select:focus, .f textarea:focus {
+    outline: none;
+    border-color: var(--tq);
+    box-shadow: 0 0 0 3px rgba(11, 163, 158, 0.3);
+  }
+  .f [aria-invalid='true'] { border-color: #b3261e; }
+  .f__err { min-height: 0; font-size: var(--fs-small); color: #b3261e; font-weight: 600; }
+  .f__err:empty { display: none; }
+  .f--submit { margin-top: 8px; justify-items: start; }
+  .f--submit .btn { min-width: 240px; box-shadow: inset 0 0 0 2px var(--pet); }
+  .f__status { font-weight: 600; }
+  .f__status.is-error { color: #b3261e; }
+
+  .cot__ok { max-width: 560px; padding: 32px; background: #fff; border-top: 4px solid var(--leaf); }
+  .cot__ok h3 { font-size: var(--fs-h3); color: var(--pet); }
+  .cot__ok p { margin-top: 12px; color: var(--ink-soft); }
+  .cot__ok:focus { outline: none; }
+
+  @media (max-width: 960px) {
+    .cot { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .f--half { grid-column: 1 / -1; }
+    .f--submit .btn { width: 100%; }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const ok = document.querySelector<HTMLElement>('[data-ok]')!;
+
+    const mensajes: Record<string, (el: HTMLInputElement) => string> = {
+      nombre: () => 'Escribe tu nombre para saber cómo llamarte.',
+      telefono: (el) => (el.validity.valueMissing
+        ? 'Necesitamos un teléfono para agendar la visita.'
+        : 'Revisa el número: escribe al menos 10 dígitos, ej. 809 555 1234.'),
+      correo: () => 'El correo no parece válido; revisa que tenga @ y dominio, o déjalo vacío.',
+    };
+
+    const check = (el: HTMLInputElement) => {
+      const err = form.querySelector<HTMLElement>(`[data-err-for="${el.name}"]`);
+      const valid = el.checkValidity();
+      el.setAttribute('aria-invalid', String(!valid));
+      if (err) err.textContent = valid ? '' : mensajes[el.name]?.(el) ?? el.validationMessage;
+      return valid;
+    };
+
+    const campos = Array.from(form.querySelectorAll<HTMLInputElement>('[data-err-for]'))
+      .map((e) => form.querySelector<HTMLInputElement>(`[name="${e.dataset.errFor}"]`)!)
+      .filter(Boolean);
+    campos.forEach((el) => {
+      el.addEventListener('blur', () => { if (el.value) check(el); });
+      el.addEventListener('input', () => { if (el.getAttribute('aria-invalid') === 'true') check(el); });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = '';
+      status.classList.remove('is-error');
+      const invalid = campos.filter((el) => !check(el));
+      if (invalid.length) {
+        invalid[0].focus();
+        return;
+      }
+      submit.disabled = true;
+      label.textContent = 'Enviando…';
+      try {
+        const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body,
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.hidden = true;
+        ok.hidden = false;
+        ok.focus();
+      } catch {
+        status.textContent = 'No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo, o escríbenos por WhatsApp.';
+        status.classList.add('is-error');
+      } finally {
+        submit.disabled = false;
+        label.textContent = 'Enviar solicitud';
+      }
+    });
+  }
+</script>

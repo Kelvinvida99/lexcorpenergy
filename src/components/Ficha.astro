@@ -1,0 +1,88 @@
+---
+import { empresa } from '../lib/config';
+
+const razones = [
+  { t: 'Mostramos obra, no renders', d: 'Cada foto de esta página es una instalación real hecha por nuestro equipo.' },
+  { t: 'Un solo equipo de principio a fin', d: 'El mismo equipo hace el estudio, el diseño, la instalación, el trámite y el mantenimiento.' },
+  { t: 'Ingeniería antes que venta', d: 'Cada propuesta parte de una visita técnica y de tus facturas reales, no de un paquete estándar.' },
+];
+
+const filas: [string, string | null][] = [
+  ['Empresa', empresa.nombre],
+  ['Servicios', 'Residencial · Comercial e industrial · Mantenimiento · Consultoría'],
+  ['Zona de servicio', empresa.zonaServicio],
+  ['Experiencia', empresa.anios],
+  ['Proyectos instalados', empresa.proyectos],
+  ['Certificaciones', empresa.certificaciones],
+  ['Equipos que instalamos', empresa.marcas],
+];
+---
+<section class="section ficha" aria-labelledby="ficha-title">
+  <div class="wrap ficha__in">
+    <div>
+      <h2 id="ficha-title" class="ficha__h">Por qué LexCorp Energy</h2>
+      <ul class="ficha__razones">
+        {razones.map((r) => (
+          <li>
+            <h3>{r.t}</h3>
+            <p>{r.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <table class="cajetin">
+      <caption class="dim">Ficha técnica de la empresa</caption>
+      <tbody>
+        {filas.map(([k, v]) => (
+          <tr>
+            <th scope="row" class="dim">{k}</th>
+            <td>{v ?? <span class="pendiente">por confirmar</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .ficha { background: var(--paper); }
+  .ficha__in {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(40px, 6vw, 112px);
+    align-items: start;
+  }
+  .ficha__h { font-size: var(--fs-h2); color: var(--pet); max-width: 12ch; }
+  .ficha__razones { list-style: none; margin: clamp(32px, 4vw, 56px) 0 0; padding: 0; display: grid; gap: 32px; }
+  .ficha__razones h3 { font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem); color: var(--pet); font-stretch: 85%; }
+  .ficha__razones p { margin-top: 8px; color: var(--ink-soft); max-width: 36rem; }
+
+  /* cajetín de plano */
+  .cajetin {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid var(--pet);
+    background: #fff;
+  }
+  .cajetin caption {
+    caption-side: top;
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--pet);
+    color: var(--tq-light);
+  }
+  .cajetin th, .cajetin td {
+    padding: 14px 16px;
+    border-top: 1px solid var(--line-light);
+    text-align: left;
+    vertical-align: top;
+  }
+  .cajetin th { width: 40%; color: var(--tq-ink); border-right: 1px solid var(--line-light); }
+  .cajetin td { font-weight: 600; color: var(--pet); }
+  .cajetin .pendiente { color: var(--ink-soft); }
+
+  @media (max-width: 860px) {
+    .ficha__in { grid-template-columns: 1fr; }
+  }
+</style>

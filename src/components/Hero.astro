@@ -1,0 +1,327 @@
+---
+import { supuestos as s } from '../lib/config';
+
+// Planta ilustrativa: 15 columnas × 4 filas de módulos = 60 módulos.
+const COLS = 15, ROWS = 4, MW = 33, MH = 62, GX = 6, GY = 18, X0 = 110, Y0 = 150;
+const modules = Array.from({ length: COLS * ROWS }, (_, i) => {
+  const r = Math.floor(i / COLS), c = i % COLS;
+  return { i, x: X0 + c * (MW + GX), y: Y0 + r * (MH + GY) };
+});
+const fmt = new Intl.NumberFormat('es-DO');
+---
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero__copy">
+    <h1 id="hero-title">Tu techo ya está listo para producir energía.</h1>
+    <p class="hero__lead">
+      Diseñamos, instalamos y mantenemos sistemas solares para viviendas, negocios e
+      industrias en República Dominicana.
+    </p>
+
+    <div class="est" role="group" aria-labelledby="est-label" data-est
+      data-tarifa={s.tarifaRDkWh} data-hsp={s.horasSolPico} data-pr={s.rendimiento}
+      data-panel={s.panelW} data-area={s.areaPanelM2} data-modules={modules.length}>
+      <label id="est-label" for="est-monto" class="est__label">¿Cuánto pagas de luz al mes?</label>
+      <div class="est__amount">
+        <span aria-hidden="true">RD$</span>
+        <input id="est-monto" type="text" inputmode="numeric" autocomplete="off"
+          value={fmt.format(s.facturaInicial)} aria-describedby="est-nota" data-monto />
+      </div>
+      <input class="est__range" type="range" min={s.facturaMin} max={s.facturaMax} step={s.facturaPaso}
+        value={s.facturaInicial} aria-label="Ajustar factura mensual" data-range />
+      <div class="est__scale dim" aria-hidden="true">
+        <span>RD$ {fmt.format(s.facturaMin)}</span><span>RD$ {fmt.format(s.facturaMax)}</span>
+      </div>
+
+      <dl class="est__out" aria-live="polite">
+        <div><dt class="dim">Paneles aprox.</dt><dd class="num" data-out="paneles">–</dd></div>
+        <div><dt class="dim">Sistema</dt><dd class="num"><span data-out="kwp">–</span> <small>kWp</small></dd></div>
+        <div><dt class="dim">Techo útil</dt><dd class="num"><span data-out="area">–</span> <small>m²</small></dd></div>
+      </dl>
+
+      <a class="btn est__cta" href="#cotizacion" data-est-cta>
+        Pedir cotización con este dato
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </a>
+      <p class="est__nota" id="est-nota">
+        Estimación orientativa: tarifa media de RD$ {s.tarifaRDkWh}/kWh, {s.horasSolPico} horas de sol pico
+        y paneles de {s.panelW} W. La cifra real sale de la visita técnica.
+      </p>
+    </div>
+  </div>
+
+  <figure class="hero__plan on-pet" aria-label="Planta ilustrativa de una azotea con los paneles estimados">
+    <svg viewBox="0 0 800 620" class="plan" role="img" aria-labelledby="plan-desc">
+      <desc id="plan-desc">Planta de una azotea de 18 por 12.7 metros con tinacos, escalera y equipos de aire acondicionado. Los módulos encendidos representan los paneles estimados.</desc>
+      <defs>
+        <linearGradient id="bolt" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fbec17" />
+          <stop offset="0.55" stop-color="#75c22f" />
+          <stop offset="1" stop-color="#46b538" />
+        </linearGradient>
+        <clipPath id="core"><rect x="80" y="470" width="120" height="70" /></clipPath>
+      </defs>
+
+      <!-- cotas -->
+      <g class="plan__dim">
+        <path d="M60 40H740M60 32v16M740 32v16" />
+        <text x="400" y="30" text-anchor="middle">18.00 m</text>
+        <path d="M30 70V550M22 70h16M22 550h16" />
+        <text x="22" y="310" text-anchor="middle" transform="rotate(-90 22 310)">12.70 m</text>
+      </g>
+
+      <!-- losa y pretil -->
+      <rect class="plan__slab" x="60" y="70" width="680" height="480" />
+      <rect class="plan__parapet" x="70" y="80" width="660" height="460" />
+
+      <!-- escalera -->
+      <rect class="plan__obj" x="80" y="470" width="120" height="70" />
+      <g clip-path="url(#core)" class="plan__hatch">
+        {Array.from({ length: 12 }, (_, k) => <path d={`M${60 + k * 16} 540L${130 + k * 16} 470`} />)}
+      </g>
+      <text class="plan__label" x="140" y="463" text-anchor="middle">ESCALERA</text>
+
+      <!-- tinacos -->
+      <circle class="plan__obj" cx="642" cy="112" r="20" />
+      <circle class="plan__obj" cx="694" cy="112" r="20" />
+      <text class="plan__label" x="580" y="116" text-anchor="end">TINACOS</text>
+
+      <!-- equipos A/A -->
+      <rect class="plan__obj" x="600" y="482" width="44" height="44" /><circle class="plan__obj" cx="622" cy="504" r="14" />
+      <rect class="plan__obj" x="656" y="482" width="44" height="44" /><circle class="plan__obj" cx="678" cy="504" r="14" />
+      <text class="plan__label" x="590" y="508" text-anchor="end">A/A</text>
+
+      <!-- módulos -->
+      <g data-modules-g>
+        {modules.map((m) => (
+          <rect class="mod" data-i={m.i} x={m.x} y={m.y} width={MW} height={MH} />
+        ))}
+      </g>
+    </svg>
+    <figcaption class="plan__caption dim">
+      <span>Planta de azotea · ilustrativa</span>
+      <span data-legend>1 módulo = 1 panel</span>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+    grid-template-areas: 'plan copy';
+    min-height: calc(100svh - var(--header-h));
+    background: var(--concrete);
+  }
+  .hero__plan {
+    grid-area: plan;
+    position: relative;
+    margin: 0;
+    display: grid;
+    align-content: center;
+    padding: clamp(24px, 4vw, 64px);
+    background-color: var(--pet);
+    /* retícula de papel técnico bajo la planta */
+    background-image:
+      linear-gradient(rgba(11, 163, 158, 0.13) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11, 163, 158, 0.13) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+  }
+  .plan { width: 100%; height: auto; max-height: calc(100svh - var(--header-h) - 120px); }
+  .plan__dim path { stroke: var(--tq-light); stroke-width: 1.2; fill: none; }
+  .plan__dim text, .plan__label {
+    fill: var(--tq-light);
+    font-family: var(--font);
+    font-stretch: 62%;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+  }
+  .plan__label { font-size: 12px; }
+  .plan__slab { fill: rgba(255, 255, 255, 0.03); stroke: var(--tq); stroke-width: 2.5; }
+  .plan__parapet { fill: none; stroke: var(--tq); stroke-width: 1; opacity: 0.6; }
+  .plan__obj { fill: var(--pet-deep); stroke: var(--tq); stroke-width: 1.5; }
+  .plan__hatch path { stroke: var(--tq); stroke-width: 1; opacity: 0.55; }
+
+  .mod {
+    fill: transparent;
+    stroke: rgba(107, 214, 207, 0.45);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+    transition: fill 0.45s var(--ease-out), stroke 0.45s var(--ease-out);
+  }
+  .mod.on {
+    fill: url(#bolt);
+    stroke: var(--pet-deep);
+    stroke-dasharray: none;
+  }
+
+  .plan__caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--tq-light);
+  }
+
+  .hero__copy {
+    grid-area: copy;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    padding: clamp(28px, 3vw, 48px) var(--gutter) clamp(28px, 3vw, 48px) clamp(24px, 3.5vw, 56px);
+    max-width: 680px;
+  }
+  .hero__copy h1 { font-size: clamp(2.5rem, 1.5rem + 2.4vw, 3.6rem); color: var(--pet); }
+  .hero__lead { font-size: var(--fs-lead); color: var(--ink-soft); max-width: 34rem; }
+
+  .est {
+    margin-top: 6px;
+    padding: clamp(18px, 2vw, 28px);
+    background: var(--paper);
+    border-top: 4px solid var(--tq);
+  }
+  .est__label { display: block; font-weight: 750; font-stretch: 88%; font-size: 1.125rem; color: var(--pet); }
+  .est__amount {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 8px;
+    color: var(--pet);
+    font-weight: 850;
+    font-stretch: 75%;
+    font-size: clamp(2rem, 1.6rem + 1.2vw, 2.5rem);
+  }
+  .est__amount span { font-size: 0.55em; font-weight: 700; color: var(--tq-ink); }
+  .est__amount input {
+    width: 100%;
+    min-width: 0;
+    padding: 0 0 4px;
+    border: 0;
+    border-bottom: 2px solid var(--line-light);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    caret-color: var(--tq);
+  }
+  .est__amount input:focus { outline: none; border-bottom-color: var(--tq); }
+  .est__amount input:focus-visible { outline: 3px solid var(--tq); outline-offset: 4px; }
+
+  .est__range {
+    width: 100%;
+    margin: 14px 0 4px;
+    accent-color: var(--pet);
+    height: 28px;
+    cursor: pointer;
+  }
+  .est__scale { display: flex; justify-content: space-between; color: var(--ink-soft); }
+
+  .est__out {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 14px 0 0;
+    border-top: 1px solid var(--line-light);
+  }
+  .est__out > div { padding: 14px 12px 0 0; }
+  .est__out > div + div { padding-left: 12px; border-left: 1px solid var(--line-light); }
+  .est__out dt { color: var(--tq-ink); }
+  .est__out dd {
+    margin: 4px 0 0;
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.25rem);
+    font-weight: 850;
+    font-stretch: 72%;
+    color: var(--pet);
+    line-height: 1;
+  }
+  .est__out small { font-size: 0.5em; font-weight: 650; color: var(--ink-soft); }
+
+  .est__cta { width: 100%; margin-top: 18px; }
+  .est__nota { margin-top: 10px; font-size: var(--fs-small); color: var(--ink-soft); }
+
+  @media (max-width: 960px) {
+    .hero {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'copy' 'plan';
+      min-height: 0;
+    }
+    .hero__copy { max-width: 680px; padding-inline: var(--gutter); }
+    .plan { max-height: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-est]');
+  if (root) {
+    const d = root.dataset;
+    const tarifa = Number(d.tarifa), hsp = Number(d.hsp), pr = Number(d.pr);
+    const panelW = Number(d.panel), areaPanel = Number(d.area), cap = Number(d.modules);
+    const monto = root.querySelector<HTMLInputElement>('[data-monto]')!;
+    const range = root.querySelector<HTMLInputElement>('[data-range]')!;
+    const out = (k: string) => root.querySelector<HTMLElement>(`[data-out="${k}"]`)!;
+    const mods = Array.from(document.querySelectorAll<SVGRectElement>('.mod'));
+    const legend = document.querySelector<HTMLElement>('[data-legend]');
+    const nf = new Intl.NumberFormat('es-DO');
+    const nf1 = new Intl.NumberFormat('es-DO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const min = Number(range.min), max = Number(range.max);
+    let lit = 0;
+
+    const calc = (factura: number) => {
+      const kwh = factura / tarifa;
+      const kwp = kwh / (hsp * 30 * pr);
+      const paneles = Math.max(1, Math.ceil((kwp * 1000) / panelW));
+      return { kwp, paneles, area: Math.ceil(paneles * areaPanel) };
+    };
+
+    const render = (factura: number) => {
+      const r = calc(factura);
+      out('paneles').textContent = nf.format(r.paneles);
+      out('kwp').textContent = nf1.format(r.kwp);
+      out('area').textContent = nf.format(r.area);
+
+      const escala = Math.max(1, Math.ceil(r.paneles / cap));
+      const target = Math.min(cap, Math.ceil(r.paneles / escala));
+      if (legend) legend.textContent = escala === 1 ? '1 módulo = 1 panel' : `1 módulo = ${escala} paneles`;
+      mods.forEach((m, i) => {
+        const on = i < target;
+        const delay = on ? Math.max(0, i - lit) * 14 : Math.max(0, lit - 1 - i) * 8;
+        m.style.transitionDelay = `${Math.min(delay, 500)}ms`;
+        m.classList.toggle('on', on);
+      });
+      lit = target;
+      root.dataset.factura = String(factura);
+    };
+
+    const parse = (v: string) => Number(v.replace(/[^\d]/g, '')) || 0;
+    const clamp = (n: number) => Math.min(max, Math.max(min, n));
+
+    range.addEventListener('input', () => {
+      const v = Number(range.value);
+      monto.value = nf.format(v);
+      render(v);
+    });
+    monto.addEventListener('input', () => {
+      const v = parse(monto.value);
+      if (v >= min) {
+        range.value = String(clamp(v));
+        render(Math.min(v, max * 5));
+      }
+    });
+    monto.addEventListener('blur', () => {
+      const v = Math.max(min, parse(monto.value));
+      monto.value = nf.format(v);
+      range.value = String(clamp(v));
+      render(v);
+    });
+
+    root.querySelector('[data-est-cta]')?.addEventListener('click', () => {
+      const campo = document.querySelector<HTMLInputElement>('[name="factura"]');
+      if (campo) campo.value = nf.format(Number(root.dataset.factura));
+    });
+
+    render(parse(monto.value));
+  }
+</script>

@@ -1,0 +1,173 @@
+---
+import { Picture } from 'astro:assets';
+import vivienda from '../assets/obras/vivienda-teja-2023-09-a.jpg';
+import comercial from '../assets/obras/azotea-comercial-2024-01-d.jpg';
+import mantenimiento from '../assets/obras/techo-paneles.jpg';
+import consultoria from '../assets/obras/baterias-inversores.jpg';
+
+const servicios = [
+  {
+    id: 'residencial',
+    titulo: 'Solar residencial',
+    texto: 'Sistemas para tu casa en techo de teja, losa o estructura elevada. Partimos de tu consumo real para que el sistema tenga el tamaño justo.',
+    incluye: ['Estudio de tu consumo', 'Diseño y planta de distribución', 'Instalación y puesta en marcha'],
+    img: vivienda,
+    alt: 'Vivienda con techo de teja y paneles solares instalados.',
+    pos: '30% 60%',
+    cota: 'Vivienda · techo de teja · sep 2023',
+  },
+  {
+    id: 'comercial',
+    titulo: 'Solar comercial e industrial',
+    texto: 'Azoteas, naves y terrenos. Sistemas sobre techo o sobre suelo dimensionados para la demanda de tu operación.',
+    incluye: ['Estructuras sobre azotea o suelo', 'Sistemas de mayor potencia', 'Coordinación con tu equipo de planta'],
+    img: comercial,
+    alt: 'Filas de paneles solares inclinados en una azotea comercial.',
+    pos: '50% 50%',
+    cota: 'Azotea comercial · ene 2024',
+  },
+  {
+    id: 'mantenimiento',
+    titulo: 'Mantenimiento y monitoreo',
+    texto: 'Limpieza, inspección y seguimiento de la producción para que el sistema siga rindiendo lo que se diseñó.',
+    incluye: ['Limpieza de paneles', 'Revisión de conexiones y protecciones', 'Seguimiento de la producción'],
+    img: mantenimiento,
+    alt: 'Paneles solares limpios sobre un techo, vistos de cerca.',
+    pos: '50% 60%',
+    cota: 'Paneles en techo',
+  },
+  {
+    id: 'consultoria',
+    titulo: 'Consultoría y estudios eléctricos',
+    texto: 'Estudios de factibilidad, ingeniería eléctrica, almacenamiento con baterías y acompañamiento en el trámite de medición neta.',
+    incluye: ['Estudios de factibilidad', 'Sistemas con baterías', 'Trámite de medición neta'],
+    img: consultoria,
+    alt: 'Cuarto técnico con inversores y baterías de litio instalados.',
+    pos: '50% 35%',
+    cota: 'Cuarto de baterías e inversores',
+  },
+];
+---
+<section class="section srv" id="servicios" aria-labelledby="srv-title">
+  <div class="wrap">
+    <div class="section__head">
+      <h2 id="srv-title">Lo que hacemos</h2>
+      <p>Desde el primer estudio hasta el mantenimiento: un solo equipo se encarga de tu sistema solar.</p>
+    </div>
+
+    <ol class="srv__list">
+      {servicios.map((s, i) => (
+        <li class={`srv__row ${i % 2 ? 'srv__row--flip' : ''}`} id={`srv-${s.id}`}>
+          <div class="srv__text">
+            <h3>{s.titulo}</h3>
+            <p>{s.texto}</p>
+            <ul class="srv__inc">
+              {s.incluye.map((x) => <li>{x}</li>)}
+            </ul>
+            <a class="srv__link" href="#cotizacion" data-servicio={s.id}>Cotizar {s.titulo.toLowerCase()}</a>
+          </div>
+          <figure class="srv__media">
+            <Picture src={s.img} alt={s.alt} formats={['avif', 'webp']} widths={[480, 800, 1200]} width={1200} quality={72}
+              sizes="(max-width: 860px) 100vw, 55vw" style={`object-position:${s.pos}`} />
+            <figcaption class="srv__cota dim"><span>Obra real · {s.cota}</span></figcaption>
+          </figure>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .srv { background: var(--paper); }
+  .srv__list { list-style: none; margin: 0; padding: 0; }
+  .srv__row {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(24px, 4vw, 72px);
+    align-items: center;
+    padding-block: clamp(32px, 4vw, 56px);
+    border-top: 1px solid var(--line-light);
+  }
+  .srv__row:last-child { border-bottom: 1px solid var(--line-light); }
+  .srv__row--flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .srv__row--flip .srv__text { order: 2; }
+
+  .srv__text h3 { font-size: var(--fs-h3); color: var(--pet); }
+  .srv__text p { margin-top: 16px; max-width: 34rem; color: var(--ink-soft); }
+  .srv__inc {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+  .srv__inc li {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 12px;
+    align-items: baseline;
+    font-weight: 550;
+  }
+  /* viñeta = módulo de panel en miniatura */
+  .srv__inc li::before {
+    content: '';
+    width: 10px;
+    height: 16px;
+    background: var(--bolt);
+    transform: translateY(2px);
+  }
+  .srv__link {
+    display: inline-block;
+    margin-top: 24px;
+    font-weight: 700;
+    color: var(--tq-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+  .srv__link:hover { color: var(--pet); }
+
+  .srv__media { margin: 0; }
+  .srv__media :global(picture) { display: block; overflow: hidden; aspect-ratio: 16 / 10; background: var(--concrete); }
+  .srv__row:nth-child(1) .srv__media :global(picture) { aspect-ratio: 4 / 3; }
+  .srv__row:nth-child(4) .srv__media :global(picture) { aspect-ratio: 5 / 4; }
+  /* cota de plano bajo cada foto: línea con remates */
+  .srv__cota {
+    position: relative;
+    margin-top: 12px;
+    padding-top: 10px;
+    color: var(--tq-ink);
+    border-top: 1px solid var(--tq);
+  }
+  .srv__cota::before, .srv__cota::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    width: 1px;
+    height: 13px;
+    background: var(--tq);
+  }
+  .srv__cota::before { left: 0; }
+  .srv__cota::after { right: 0; }
+  .srv__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-out);
+  }
+  .srv__row:hover .srv__media :global(img) { transform: scale(1.03); }
+
+  @media (max-width: 860px) {
+    .srv__row, .srv__row--flip { grid-template-columns: 1fr; }
+    .srv__row--flip .srv__text { order: 0; }
+    .srv__media { order: -1; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-servicio]').forEach((a) =>
+    a.addEventListener('click', () => {
+      const sel = document.querySelector<HTMLSelectElement>('[name="servicio"]');
+      if (sel) sel.value = a.dataset.servicio!;
+    })
+  );
+</script>

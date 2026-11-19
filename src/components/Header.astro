@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/marca/logo.png';
+
+const links = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#proceso', label: 'Cómo trabajamos' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#preguntas', label: 'Preguntas' },
+];
+---
+<header class="hdr on-pet" data-hdr>
+  <div class="hdr__in">
+    <a class="hdr__logo" href="#top" aria-label="LexCorp Energy, inicio">
+      <Image src={logo} alt="" width={84} height={83} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav class="hdr__nav" aria-label="Principal">
+      <button class="hdr__toggle" type="button" aria-expanded="false" aria-controls="menu" data-toggle>
+        <span class="sr-only">Abrir menú</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </button>
+      <ul id="menu" class="hdr__menu" data-menu>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li class="hdr__cta-li"><a class="btn btn--sun hdr__cta" href="#cotizacion">Pedir cotización</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--pet);
+    color: var(--on-pet);
+    border-bottom: 1px solid var(--line);
+  }
+  .hdr__in {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: var(--header-h);
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  /* cajetín: el logo vive en el bloque de título claro del plano */
+  .hdr__logo {
+    display: block;
+    flex: none;
+    align-self: stretch;
+    display: grid;
+    place-items: center;
+    padding: 0 14px;
+    background: var(--paper);
+    border-inline: 2px solid var(--tq);
+  }
+  .hdr__logo :global(img) { width: 64px; height: auto; }
+  .hdr__nav { margin-left: auto; }
+  .hdr__menu {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2.4vw, 36px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hdr__menu a:not(.btn) {
+    font-weight: 600;
+    font-stretch: 88%;
+    text-decoration: none;
+    padding-block: 8px;
+    background: linear-gradient(var(--tq), var(--tq)) no-repeat left bottom / 0 2px;
+    transition: background-size 0.3s var(--ease-out);
+  }
+  .hdr__menu a:not(.btn):hover { background-size: 100% 2px; }
+  .hdr__cta { min-height: 46px; padding: 10px 20px; }
+  .hdr__toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+    border: 0;
+    background: transparent;
+    color: var(--on-pet);
+    cursor: pointer;
+  }
+
+  @media (max-width: 860px) {
+    .hdr { --header-h: 68px; }
+    .hdr__logo :global(img) { width: 50px; }
+    .hdr__toggle { display: block; }
+    .hdr__menu {
+      position: absolute;
+      inset: var(--header-h) 0 auto 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 8px var(--gutter) 24px;
+      background: var(--pet);
+      border-bottom: 1px solid var(--line);
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0s 0.25s;
+    }
+    .hdr__menu[data-open] {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+    }
+    .hdr__menu a:not(.btn) {
+      display: block;
+      padding: 14px 0;
+      font-size: 1.25rem;
+      border-bottom: 1px solid var(--line);
+      background: none;
+    }
+    .hdr__cta-li { margin-top: 16px; }
+    .hdr__cta { width: 100%; }
+  }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  if (btn && menu) {
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      btn.querySelector('.sr-only')!.textContent = open ? 'Cerrar menú' : 'Abrir menú';
+      menu.toggleAttribute('data-open', open);
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) set(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        set(false);
+        btn.focus();
+      }
+    });
+  }
+</script>
