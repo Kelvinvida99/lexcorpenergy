@@ -5,9 +5,9 @@
   --pet: #034644;
   --pet-deep: #022e2d;
   --pet-mid: #0a5853;
-  --tq: #0ba39e;
-  --tq-ink: #05706b;   /* turquesa para texto sobre claro (AA) */
-  --tq-light: #6bd6cf; /* turquesa para texto sobre petróleo (AA) */
+  --tq: #009999;
+  --tq-ink: #007070;   /* turquesa para texto sobre claro (AA) */
+  --tq-light: #6bd6d6; /* turquesa para texto sobre petróleo (AA) */
   --sun: #fbec17;
   --lime: #75c22f;
   --leaf: #46b538;
@@ -20,7 +20,7 @@
   --ink-soft: #3d5654;
   --on-pet: #eef6f4;
   --on-pet-soft: #a9cfca;
-  --line: rgba(11, 163, 158, 0.32);
+  --line: rgba(0, 153, 153, 0.32);
   --line-light: rgba(3, 70, 68, 0.18);
 
   /* Tipo */
