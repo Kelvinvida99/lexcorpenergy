@@ -33,7 +33,7 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--pet);
+    background: var(--brand);
     color: var(--on-pet);
     border-bottom: 1px solid var(--line);
   }
@@ -55,7 +55,7 @@ const links = [
     place-items: center;
     padding: 0 14px;
     background: var(--paper);
-    border-inline: 2px solid var(--tq);
+    border-inline: 2px solid var(--pet);
   }
   .hdr__logo :global(img) { width: 64px; height: auto; }
   .hdr__nav { margin-left: auto; }
@@ -72,7 +72,7 @@ const links = [
     font-stretch: 88%;
     text-decoration: none;
     padding-block: 8px;
-    background: linear-gradient(var(--tq), var(--tq)) no-repeat left bottom / 0 2px;
+    background: linear-gradient(currentColor, currentColor) no-repeat left bottom / 0 2px;
     transition: background-size 0.3s var(--ease-out);
   }
   .hdr__menu a:not(.btn):hover { background-size: 100% 2px; }
@@ -99,7 +99,7 @@ const links = [
       align-items: stretch;
       gap: 0;
       padding: 8px var(--gutter) 24px;
-      background: var(--pet);
+      background: var(--brand);
       border-bottom: 1px solid var(--line);
       visibility: hidden;
       opacity: 0;

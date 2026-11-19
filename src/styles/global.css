@@ -2,12 +2,13 @@
 
 :root {
   /* Marca (medido del logo) */
-  --pet: #034644;
-  --pet-deep: #022e2d;
-  --pet-mid: #0a5853;
+  --brand: #009999;    /* superficie de marca: cabecera, plano, proceso, cotización */
+  --pet: #005c5c;      /* petróleo: botones y títulos sobre claro */
+  --pet-deep: #002b2b; /* tinta oscura: pie y texto sobre --brand (5:1) */
+  --pet-mid: #004a4a;
   --tq: #009999;
   --tq-ink: #007070;   /* turquesa para texto sobre claro (AA) */
-  --tq-light: #6bd6d6; /* turquesa para texto sobre petróleo (AA) */
+  --tq-light: #9ee6e6; /* turquesa para texto sobre petróleo (AA, 5:1 sobre --pet) */
   --sun: #fbec17;
   --lime: #75c22f;
   --leaf: #46b538;
@@ -21,7 +22,7 @@
   --on-pet: #eef6f4;
   --on-pet-soft: #a9cfca;
   --line: rgba(0, 153, 153, 0.32);
-  --line-light: rgba(3, 70, 68, 0.18);
+  --line-light: rgba(0, 92, 92, 0.18);
 
   /* Tipo */
   --font: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
@@ -85,7 +86,7 @@ a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px
   outline: 3px solid var(--tq);
   outline-offset: 3px;
 }
-.on-pet :focus-visible { outline-color: var(--sun); }
+.on-pet :focus-visible { outline-color: #fff; }
 
 ::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: var(--concrete); }
@@ -111,7 +112,13 @@ a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px
 .num { font-variant-numeric: tabular-nums; }
 
 .on-pet {
-  background: var(--pet);
+  /* Sobre #009999 el blanco da 3,5:1: solo para títulos y texto grande.
+     Párrafos, rótulos y líneas pasan a tinta oscura (5:1). */
+  --on-pet: #fff;
+  --on-pet-soft: var(--pet-deep);
+  --tq-light: var(--pet-deep);
+  --line: rgba(0, 43, 43, 0.28);
+  background: var(--brand);
   color: var(--on-pet);
 }
 

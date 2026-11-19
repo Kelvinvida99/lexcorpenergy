@@ -86,7 +86,7 @@ const full = await Promise.all(
     transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
   }
   .proy__filters button span { margin-left: 4px; color: var(--tq-ink); font-weight: 600; }
-  .proy__filters button:hover { background: rgba(3, 70, 68, 0.07); }
+  .proy__filters button:hover { background: rgba(0, 92, 92, 0.07); }
   .proy__filters button[aria-pressed='true'] { background: var(--pet); color: #fff; }
   .proy__filters button[aria-pressed='true'] span { color: var(--tq-light); }
 
@@ -127,7 +127,7 @@ const full = await Promise.all(
     justify-content: space-between;
     gap: 4px 12px;
     padding: 12px 14px;
-    background: linear-gradient(transparent, rgba(2, 46, 45, 0.88));
+    background: linear-gradient(transparent, rgba(0, 43, 43, 0.88));
     color: #fff;
     text-align: left;
   }
@@ -163,10 +163,10 @@ const full = await Promise.all(
     margin: 0;
     padding: 0;
     border: 0;
-    background: rgba(2, 30, 29, 0.96);
+    background: rgba(0, 30, 30, 0.96);
     color: var(--on-pet);
   }
-  .lb::backdrop { background: rgba(2, 30, 29, 0.6); }
+  .lb::backdrop { background: rgba(0, 30, 30, 0.6); }
   .lb[open] { display: grid; place-items: center; animation: lb-in 0.3s var(--ease-out); }
   @keyframes lb-in { from { opacity: 0; } }
   .lb__fig { margin: 0; display: grid; gap: 12px; padding: 64px clamp(16px, 6vw, 96px); max-width: 100%; }

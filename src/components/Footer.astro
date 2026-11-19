@@ -57,7 +57,14 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .ftr { background: var(--pet-deep); padding-top: clamp(56px, 7vw, 96px); }
+  .ftr {
+    /* el pie sigue oscuro: recupera los tonos claros para texto */
+    --on-pet: #eef6f4;
+    --on-pet-soft: #a9cfca;
+    --tq-light: #9ee6e6;
+    --line: rgba(0, 153, 153, 0.32);
+    background: var(--pet-deep);
+    padding-top: clamp(56px, 7vw, 96px); }
   .ftr__in {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr);

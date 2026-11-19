@@ -103,7 +103,7 @@ const wa = waLink('Hola, quiero una cotización de energía solar.');
   }
   .cot__side {
     padding: clamp(56px, 8vw, 120px) clamp(24px, 5vw, 80px);
-    background-color: var(--pet);
+    background-color: var(--brand);
   }
   .cot__side h2 { font-size: var(--fs-h2); }
   .cot__lead { margin-top: 20px; font-size: var(--fs-lead); color: var(--on-pet-soft); max-width: 30rem; }
@@ -114,10 +114,11 @@ const wa = waLink('Hola, quiero una cotización de energía solar.');
     gap: 16px;
     padding: 16px 0;
     border-bottom: 1px solid var(--line);
+    color: var(--on-pet-soft);
   }
-  .cot__next .dim { color: var(--sun); padding-top: 3px; }
+  .cot__next .dim { color: var(--on-pet-soft); padding-top: 3px; }
   .cot__alt { margin-top: 40px; display: grid; gap: 14px; justify-items: start; color: var(--on-pet-soft); }
-  .cot__alt a:not(.btn) { color: #fff; }
+  .cot__alt a:not(.btn) { color: inherit; font-weight: 600; }
 
   .cot__form-wrap { padding: clamp(48px, 7vw, 112px) clamp(24px, 5vw, 80px); }
   .cot__form {
@@ -134,7 +135,7 @@ const wa = waLink('Hola, quiero una cotización de energía solar.');
     width: 100%;
     min-height: 52px;
     padding: 12px 14px;
-    border: 1px solid rgba(3, 70, 68, 0.45);
+    border: 1px solid rgba(0, 92, 92, 0.45);
     border-radius: 0;
     background: #fff;
     color: var(--ink);
@@ -144,7 +145,7 @@ const wa = waLink('Hola, quiero una cotización de energía solar.');
   }
   .f select {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6' fill='none' stroke='%23034644' stroke-width='2'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6' fill='none' stroke='%23005c5c' stroke-width='2'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 20px;
